@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <p>Play rock, paper, scissors!</p>
+  <script>
+    // utility function to randomize computer choice
+    function getComputerChoice() {
+      let choices = ['rock', 'paper', 'scissors'];
+      return choices[Math.floor(Math.random() * choices.length)]
+    }
+
+    // utility function to accept any capitalization case of player choice
+    function capitalizeFirstLetter(input) {
+      input = input.toLowerCase()
+      input = input.charAt(0).toUpperCase() + input.slice(1);
+      return input;
+    }
+
+    function playRound(playerSelection, computerSelection) {
+      playerSelection = capitalizeFirstLetter(playerSelection);
+      computerSelection = capitalizeFirstLetter(computerSelection);
+
+      let result;
+
+      if (playerSelection == computerSelection) {
+        result = `You tie. You both chose ${playerSelection}.`;
+      } else if (playerSelection == 'Rock' && computerSelection == 'Paper') {
+        result = `You lose! ${computerSelection} beats ${playerSelection}!`;
+      } else if (playerSelection == 'Paper' && computerSelection == 'Scissors') {
+        result = `You lose! ${computerSelection} beats ${playerSelection}!`;
+      } else if (playerSelection == 'Scissors' && computerSelection == 'Rock') {
+        result = `You lose! ${computerSelection} beats ${playerSelection}!`;
+      } else {
+        result = `You win! ${playerSelection} beats ${computerSelection}!`
+      }
+
+      return result;
+
+    }
+
+    function playGame() {
+      const playerSelection = prompt('Choose rock, paper, or scissors:');
+      const computerSelection = getComputerChoice();
+      console.log(playRound(playerSelection, computerSelection));
+    }
+    
+    playGame();
+    playGame();
+    playGame();
+    playGame();
+    playGame();
+
+  </script>
+</body>
+</html>
