@@ -7,53 +7,90 @@
 </head>
 <body>
   <p>Play rock, paper, scissors!</p>
+  <p>Choose one:</p>
+  <button>Rock</button>
+  <button>Paper</button>
+  <button>Scissors</button>
+  <div class="game-log">
+    <p class="score"></p>
+  </div>
   <script>
     // utility function to randomize computer choice
     function getComputerChoice() {
-      let choices = ['rock', 'paper', 'scissors'];
+      let choices = ['Rock', 'Paper', 'Scissors'];
       return choices[Math.floor(Math.random() * choices.length)]
     }
 
-    // utility function to accept any capitalization case of player choice
-    function capitalizeFirstLetter(input) {
-      input = input.toLowerCase()
-      input = input.charAt(0).toUpperCase() + input.slice(1);
-      return input;
-    }
-
     function playRound(playerSelection, computerSelection) {
-      playerSelection = capitalizeFirstLetter(playerSelection);
-      computerSelection = capitalizeFirstLetter(computerSelection);
-
-      let result;
+      let winner;
+      let resultText;
 
       if (playerSelection == computerSelection) {
-        result = `You tie. You both chose ${playerSelection}.`;
+        winner = 'tie';
+        resultText = `You tie. You both chose ${playerSelection}.`;
       } else if (playerSelection == 'Rock' && computerSelection == 'Paper') {
-        result = `You lose! ${computerSelection} beats ${playerSelection}!`;
+        winner = 'computer';
+        resultText = `You lose! ${computerSelection} beats ${playerSelection}!`;
       } else if (playerSelection == 'Paper' && computerSelection == 'Scissors') {
-        result = `You lose! ${computerSelection} beats ${playerSelection}!`;
+        winner = 'computer';
+        resultText = `You lose! ${computerSelection} beats ${playerSelection}!`;
       } else if (playerSelection == 'Scissors' && computerSelection == 'Rock') {
-        result = `You lose! ${computerSelection} beats ${playerSelection}!`;
+        winner = 'computer';
+        resultText = `You lose! ${computerSelection} beats ${playerSelection}!`;
       } else {
-        result = `You win! ${playerSelection} beats ${computerSelection}!`
+        winner = 'player';
+        resultText = `You win! ${playerSelection} beats ${computerSelection}!`
       }
 
-      return result;
+      return [winner, resultText];
 
     }
 
-    function playGame() {
-      const playerSelection = prompt('Choose rock, paper, or scissors:');
-      const computerSelection = getComputerChoice();
-      console.log(playRound(playerSelection, computerSelection));
+    const buttons = document.querySelectorAll('button');
+    const resultDiv = document.querySelector('.game-log');
+    const scoreP = document.querySelector('.score');
+
+    let numPlayerWins = 0;
+    let numComputerWins = 0;
+
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].addEventListener('click', function (e) {
+        let playerSelection = e.target.textContent;
+        let computerSelection = getComputerChoice();
+        let roundResult = playRound(playerSelection, computerSelection);
+        
+        let winner = roundResult[0];
+        let resultText = roundResult[1];
+
+        // if round is a tie, do nothing
+        if (winner == 'player') {
+          numPlayerWins++;
+        } else if (winner == 'computer') {
+          numComputerWins++;
+        }
+
+        scoreP.textContent = `Player: ${numPlayerWins}, Computer: ${numComputerWins}`;
+
+        let resultP = document.createElement('p');
+        resultP.textContent = resultText;
+        resultDiv.appendChild(resultP);
+
+        if (numPlayerWins == 5) {
+          gameEndP = document.createElement('p');
+          gameEndP.textContent = `You beat the computer ${numPlayerWins} to ${numComputerWins}!`;
+          resultDiv.appendChild(gameEndP);
+          numPlayerWins = 0;
+          numComputerWins = 0;
+        } else if (numComputerWins == 5) {
+          gameEndP = document.createElement('p');
+          gameEndP.textContent = `You lose to the computer ${numComputerWins} to ${numPlayerWins}. Too bad!`;
+          resultDiv.appendChild(gameEndP);
+          numPlayerWins = 0;
+          numComputerWins = 0;
+        }
+
+      });
     }
-    
-    playGame();
-    playGame();
-    playGame();
-    playGame();
-    playGame();
 
   </script>
 </body>
